@@ -1,0 +1,43 @@
+.container-fluid {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+body {
+    text-align: center;
+    background-image: url(../img/IceBackground.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 20em;
+}
+
+h1 {
+    color: white;
+    font-size: 5em;
+}
+
+.btn {
+    background: none;
+    border-radius: 0;
+    border: 6px solid white;
+    color: white;
+    margin: 20px;
+    height: 3em;
+    width: 12em;
+    font-size: 1.5em;
+    margin-top: 2em;
+}
+
+.btn:hover {
+    background: none;
+    color: white;
+}
+
+#game {
+    display : block;
+    margin : auto;
+}
+
+canvas {
+    margin: auto;
+}
