@@ -33,11 +33,6 @@ h1 {
     color: white;
 }
 
-#game {
-    display : block;
-    margin : auto;
-}
-
 canvas {
     margin: auto;
 }

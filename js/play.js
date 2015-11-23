@@ -9,7 +9,7 @@ var playState = {
         player2 = game.add.sprite(810, 250, 'player1');
         goal1 = game.add.sprite(8, 250, 'goal');
         goal2 = game.add.sprite(990, 250, 'goal');
-        puck = game.add.sprite(505, 253, 'puck');
+        puck = game.add.sprite(game.world.centerX, game.world.centerY, 'puck');
 
         //Sounds
         puckSound = game.add.audio('puckSound');
@@ -17,7 +17,13 @@ var playState = {
         //Scores
         player1text = game.add.text(50, 50, player1Score);
         player2text = game.add.text(920, 50, player2Score);
-
+        
+        //Timer
+        game.time.events.loop(1000, timerFunc);
+        timerText = game.add.text(game.world.centerX, 50, '0');
+        timerText.anchor.setTo(0.5, 0.5);
+        
+        
         //*******Layout Code*******\\
         //-------Setting Scale-------\\
         player1.scale.setTo(0.3);
@@ -36,13 +42,13 @@ var playState = {
 
         //********Add physics to players, goals and puck*******\\
         game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
-        startPuck();
+        
 
         //********Adds collision and bounce********\\
         puck.body.collideWorldBounds = true;
         player1.body.collideWorldBounds = true;
         player2.body.collideWorldBounds = true;
-        puck.body.bounce.setTo(1, 0.875);
+        puck.body.bounce.setTo(1.01, 0.875);
 
         //*******Set players and goals to immovable*******\\
         player1.body.immovable = true;
@@ -74,6 +80,10 @@ var playState = {
         else if (player2Down.isDown) {
             player2.body.velocity.y = 400;
         } 
+        else if (startButton.isDown) {
+            game.paused = false;
+            puck.body.velocity.setTo(-500, 300);
+        }
         else {
             player1.body.velocity.setTo(0);
             player2.body.velocity.setTo(0);
@@ -98,22 +108,46 @@ function addPoint(player) {
     }
 }
 
-function startPuck() {
-    //if (startButton.isDown) {
-        puck.body.velocity.setTo(500, 300);
-        puck.body.x = 505;
-        puck.body.y = 253;
-    //}
-}
-
 function checkGoal() {
     if (game.physics.arcade.overlap(goal1, puck)) {
         addPoint(2);
-        startPuck();
+        puck.body.x = 480;
+        puck.body.y = 235;
+        puck.body.velocity.setTo(0);        
     }
 
     if (game.physics.arcade.overlap(goal2, puck)) {
         addPoint(1);
-        startPuck();
+        puck.body.x = 480;
+        puck.body.y = 235;
+        puck.body.velocity.setTo(0);        
+    }
+    
+    //checks for a winner each time a point is scored
+    if (player1Score === playTo){
+        winner = "Player 1";
+        console.log("PLAYER 1 WINS");
+    }
+    else if (player2Score === playTo) {
+        winner = "Player 2";
+        console.log('PLAYER 2 WINS')
     }
 }
+
+
+function timerFunc() {
+    timer ++;
+    timerText.text = timer;
+}
+
+
+
+
+
+
+
+
+
+
+
+

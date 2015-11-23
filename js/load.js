@@ -25,6 +25,9 @@ var loadState = {
         hasScored = false;
         player1Score = 0;
         player2Score = 0;
+        timer = -1;
+        winner = " ";
+        playTo = 10;
         
     },
     
