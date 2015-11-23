@@ -1,8 +1,5 @@
 var game = new Phaser.Game(1000, 520, Phaser.AUTO, 'game', { preload: preload, create: create, update: update });
 
-var player1Score = 0;
-var player2Score = 0;
-
 
 function preload() {
 
@@ -18,6 +15,10 @@ function preload() {
 
 function create(){
     
+    hasScored = false;
+    player1Score = 0;
+    player2Score = 0;
+    
     //*******Add physics to game*******\\
     game.physics.startSystem(Phaser.Physics.ARCADE);
     
@@ -27,6 +28,8 @@ function create(){
     
     player2Up = game.input.keyboard.addKey(Phaser.Keyboard.K);
     player2Down = game.input.keyboard.addKey(Phaser.Keyboard.M);
+    
+    startButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     
     //*******Add all images to game*******\\
     ground = game.add.sprite(0, 0, 'ground');
@@ -38,7 +41,7 @@ function create(){
     
     goal2 = game.add.sprite(990,250, 'goal');
     
-    puck = game.add.sprite(400, 250, 'puck');
+    puck = game.add.sprite(505, 253, 'puck');
     
     puckSound = game.add.audio('puckSound');
 
@@ -61,7 +64,7 @@ function create(){
     
     //********Add physics to players, goals and puck*******\\
     game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
-    puck.body.velocity.setTo(500, 300);
+    startPuck();
     
     //********Adds collision and bounce********\\
     puck.body.collideWorldBounds = true;
@@ -75,8 +78,10 @@ function create(){
     goal1.body.immovable = true;
     goal2.body.immovable = true;
 
-    goal1.body.checkCollision.down = false;
-    goal2.body.checkCollision.up = false;
+    goal1.body.checkCollision.left = false;
+    goal1.body.checkCollision.right = false;
+    goal2.body.checkCollision.left = false;
+    goal2.body.checkCollision.right = false;
     
 }
 
@@ -84,9 +89,8 @@ function update(){
     
     game.physics.arcade.collide(player1, puck, playPuckSound);
     game.physics.arcade.collide(player2, puck, playPuckSound);
-    game.physics.arcade.collide(goal1, puck, addPoint(2));
-    game.physics.arcade.collide(goal2, puck, addPoint(1));
-
+    
+    checkGoal();
     
     if (player1Up.isDown){
         player1.body.velocity.y = -400;
@@ -114,14 +118,35 @@ function playPuckSound(){
     puckSound.play();
 }
 
-function addPoint(player) {
+function addPoint(player){
+    
     if(player === 1){
         player1Score ++;
         console.log(player2Score);
     }
     else if(player === 2){
         player2Score ++;
-        console.log(player2Score);
+        console.log(player1Score);
+    }
+}
+
+function startPuck() {
+    if(startButton.isDown){
+        puck.body.velocity.setTo(500, 300);
+        puck.body.x = 505;
+        puck.body.y = 253;
+    }
+}
+
+function checkGoal(){
+    if(game.physics.arcade.overlap(goal1, puck)) {
+        addPoint(2);
+        startPuck();
+    }
+
+    if(game.physics.arcade.overlap(goal2, puck)) {
+        addPoint(1);
+        startPuck();
     }
 }
 
