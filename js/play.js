@@ -1,61 +1,63 @@
-
+//define state 
 var playState = {
     
     create : function() {
         
-        //*******Add all images to game*******\\
+        //add all assests to the game board
         ground = game.add.sprite(0, 0, 'ground');
         player1 = game.add.sprite(205, 250, 'player1');
         player2 = game.add.sprite(810, 250, 'player1');
         goal1 = game.add.sprite(8, 250, 'goal');
         goal2 = game.add.sprite(990, 250, 'goal');
-        puck = game.add.sprite(game.world.centerX, game.world.centerY, 'puck');
+        puck = game.add.sprite(480, 235, 'puck');
 
-        //Sounds
+        //Add Sounds
         puckSound = game.add.audio('puckSound');
 
-        //Scores
+        //Add Scores
         player1text = game.add.text(50, 50, player1Score);
         player2text = game.add.text(920, 50, player2Score);
         
-        //Timer
+        //Add Timer
         game.time.events.loop(1000, timerFunc);
         timerText = game.add.text(game.world.centerX, 50, '0');
         timerText.anchor.setTo(0.5, 0.5);
         
         
-        //*******Layout Code*******\\
-        //-------Setting Scale-------\\
+        //Layout Code
+        //Setting Scale
         player1.scale.setTo(0.3);
         player2.scale.setTo(0.3);
         puck.scale.setTo(0.3);
         goal1.scale.setTo(0.7);
         goal2.scale.setTo(0.7);
-
-
-        //-------Set anchor to center-------\\
+        //Set anchor to center for easier positioning
         player1.anchor.setTo(0.5);
         player2.anchor.setTo(0.5);
         goal1.anchor.setTo(0.5);
         goal2.anchor.setTo(0.5);
         puck.anchor.setTo(0.5);
-
-        //********Add physics to players, goals and puck*******\\
-        game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
         
 
-        //********Adds collision and bounce********\\
+        //Add physics to players, goals and puck
+        game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
+        
+        //Dont let players or puck leave the world bounds
         puck.body.collideWorldBounds = true;
         player1.body.collideWorldBounds = true;
         player2.body.collideWorldBounds = true;
-        puck.body.bounce.setTo(1.01, 0.875);
+        
+        //Smaller y bounce for better play
+        //Slightly increase X to speed up the pace
+        puck.body.bounce.setTo(1.03, 0.875);
 
-        //*******Set players and goals to immovable*******\\
+        //Set players and goals to immovable
         player1.body.immovable = true;
         player2.body.immovable = true;
         goal1.body.immovable = true;
         goal2.body.immovable = true;
 
+        //Allow overlap to simulate puck going into goal
         goal1.body.checkCollision.left = false;
         goal1.body.checkCollision.right = false;
         goal2.body.checkCollision.left = false;
@@ -63,11 +65,15 @@ var playState = {
     },
     
     update : function(){
+        
+        //plays sound on collision
         game.physics.arcade.collide(player1, puck, playPuckSound);
         game.physics.arcade.collide(player2, puck, playPuckSound);
-
+        
+        //Check if puck overlaps goal area
         checkGoal();
 
+        //creates player controls
         if (player1Up.isDown) {
             player1.body.velocity.y = -400;
         } 
@@ -80,24 +86,34 @@ var playState = {
         else if (player2Down.isDown) {
             player2.body.velocity.y = 400;
         } 
-        else if (startButton.isDown) {
-            game.paused = false;
-            puck.body.velocity.setTo(-500, 300);
-        }
+        //if player isnt pressing button dont you dare move
         else {
             player1.body.velocity.setTo(0);
             player2.body.velocity.setTo(0);
         }
+        //if puck is reset press space to start it again
+        if (startButton.isDown && puck.body.velocity.x === 0) {
+            //TODO randomize these funciton parameters
+            puck.body.velocity.setTo(-500, 300);
+        }
     }
 }
 
+//Helper functions
 
+// Just a simple timer to display on the gameboard
+function timerFunc() {
+    timer ++;
+    timerText.text = timer;
+}
+
+//Called to play sound when puck hits a player
 function playPuckSound() {
     puckSound.play();
 }
 
+//checks which player to add score and updates score and text
 function addPoint(player) {
-
     if (player === 1) {
         player1Score++;
         player1text.text = player1Score;
@@ -108,6 +124,9 @@ function addPoint(player) {
     }
 }
 
+//checks if puck overlaps goal area
+//calls add point, resets puck position and stops its movement
+//also checks if a player has won
 function checkGoal() {
     if (game.physics.arcade.overlap(goal1, puck)) {
         addPoint(2);
@@ -125,20 +144,17 @@ function checkGoal() {
     
     //checks for a winner each time a point is scored
     if (player1Score === playTo){
-        winner = "Player 1";
-        console.log("PLAYER 1 WINS");
+        winner = "player1";
+        game.state.start('gameOver');
     }
     else if (player2Score === playTo) {
-        winner = "Player 2";
-        console.log('PLAYER 2 WINS')
+        winner = "player2";
+        game.state.start('gameOver');
     }
 }
 
 
-function timerFunc() {
-    timer ++;
-    timerText.text = timer;
-}
+
 
 
 
