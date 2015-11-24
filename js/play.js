@@ -12,8 +12,6 @@ var playState = {
         //*********NEED TO CHECK WHY THIS DOESNT WORK!!!!!
         //this.scale.setScreenSize(true);
         
-        
-        
         //add all assests to the game board
         ground = game.add.sprite(0, 0, 'ground');
         player1 = game.add.sprite(205, 250, 'player1');
