@@ -1,6 +1,15 @@
 var optionsState = {
 
     create: function () {
+        
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        this.scale.pageAlignHorizontally = true;
+
+        this.scale.pageAlignVertically = true;
+
+        //*********NEED TO CHECK WHY THIS DOESNT WORK!!!!!
+        //this.scale.setScreenSize(true);
 
         ground = game.add.sprite(0, 0, 'ground');
         playTo5 = game.add.sprite(game.world.centerX, game.world.centerY, 'playTo5');

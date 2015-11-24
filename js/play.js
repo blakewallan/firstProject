@@ -3,6 +3,17 @@ var playState = {
     
     create : function() {
         
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        this.scale.pageAlignHorizontally = true;
+
+        this.scale.pageAlignVertically = true;
+        
+        //*********NEED TO CHECK WHY THIS DOESNT WORK!!!!!
+        //this.scale.setScreenSize(true);
+        
+        
+        
         //add all assests to the game board
         ground = game.add.sprite(0, 0, 'ground');
         player1 = game.add.sprite(205, 250, 'player1');
@@ -75,16 +86,16 @@ var playState = {
 
         //creates player controls
         if (player1Up.isDown) {
-            player1.body.velocity.y = -400;
+            player1.body.velocity.y = -500;
         } 
         else if (player1Down.isDown) {
-            player1.body.velocity.y = 400;
+            player1.body.velocity.y = 500;
         } 
         else if (player2Up.isDown) {
-            player2.body.velocity.y = -400;
+            player2.body.velocity.y = -500;
         } 
         else if (player2Down.isDown) {
-            player2.body.velocity.y = 400;
+            player2.body.velocity.y = 500;
         } 
         //if player isnt pressing button dont you dare move
         else {
