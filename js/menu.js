@@ -22,6 +22,7 @@ var menuState = {
         pulse.yoyo(true, 500);
         
         //Boots to play state on spacebar press
+        this.input.onDown.addOnce(this.start, this);
         startButton.onDown.addOnce(this.start, this);
     },
 

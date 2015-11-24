@@ -13,7 +13,9 @@ var optionsState = {
 
         ground = game.add.sprite(0, 0, 'ground');
         playTo5 = game.add.sprite(game.world.centerX, game.world.centerY, 'playTo5');
-        playTo10 = game.add.sprite(game.world.centerX, game.world.centerY + 50, 'playTo10');
+        playTo5.inputEnabled = true;
+        playTo10 = game.add.sprite(game.world.centerX, game.world.centerY + 100, 'playTo10');
+        playTo10.inputEnabled = true;
         
         playTo5.anchor.setTo(0.5);
         playTo10.anchor.setTo(0.5);
@@ -27,6 +29,8 @@ var optionsState = {
         pulse2.yoyo(true, 500);
 
         //Boots to play state after options selected
+        playTo5.events.onInputDown.addOnce(this.play5, this);
+        playTo10.events.onInputDown.addOnce(this.play10, this);
         select1.onDown.addOnce(this.play5, this);
         select2.onDown.addOnce(this.play10, this);
     },

@@ -21,6 +21,13 @@ var playState = {
         goal1 = game.add.sprite(8, 250, 'goal');
         goal2 = game.add.sprite(990, 250, 'goal');
         puck = game.add.sprite(game.world.centerX, game.world.centerY, 'puck');
+        //arrowUp = game.add.sprite(120,50, 'arrow');
+        //arrowDown = game.add.sprite(120,470, 'arrow');
+        
+        puck.inputEnabled = true;
+        puck.events.onInputDown.add(firePuck);
+        //arrowUp.inputEnabled = true;
+        //arrowDown.inputEnabled = true;
 
         //Add Sounds
         puckSound = game.add.audio('puckSound');
@@ -48,8 +55,12 @@ var playState = {
         goal1.anchor.setTo(0.5);
         goal2.anchor.setTo(0.5);
         puck.anchor.setTo(0.5);
+        //arrowDown.anchor.setTo(0.5);
+        //arrowUp.anchor.setTo(0.5);
         
-
+        //arrowUp.angle = -270;
+        //arrowDown.angle = -90;
+        
         //Add physics to players, goals and puck
         game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
         
@@ -103,9 +114,10 @@ var playState = {
             player2.body.velocity.setTo(0);
         }
         //if puck is reset press space to start it again
+        
         if (startButton.isDown && puck.body.velocity.x === 0) {
             //TODO randomize these funciton parameters
-            puck.body.velocity.setTo(-500, 300);
+            firePuck();
         }
     }
 }
@@ -121,6 +133,10 @@ function timerFunc() {
 //Called to play sound when puck hits a player
 function playPuckSound() {
     puckSound.play();
+}
+
+function firePuck() {
+    puck.body.velocity.setTo(1000, 400);
 }
 
 //checks which player to add score and updates score and text

@@ -14,8 +14,9 @@ var loadState = {
         game.load.image('goal1', 'img/goal.png');
         game.load.image('goal', 'img/goal.png');
         game.load.image('puck', 'img/puck.png');
+        game.load.image('arrow', 'img/Arrow.png');
         game.load.audio('puckSound', 'assests/puckSound.wav');
-
+        
         //Add physics to game
         game.physics.startSystem(Phaser.Physics.ARCADE);
 

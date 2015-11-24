@@ -33,6 +33,7 @@ var gameOverState = {
         }
         
         //Boots to play state on spacebar press
+        this.input.onDown.addOnce(this.start, this);
         startButton.onDown.addOnce(this.start, this);
     },
 
