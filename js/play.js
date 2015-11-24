@@ -21,13 +21,11 @@ var playState = {
         goal1 = game.add.sprite(8, 250, 'goal');
         goal2 = game.add.sprite(990, 250, 'goal');
         puck = game.add.sprite(game.world.centerX, game.world.centerY, 'puck');
-        //arrowUp = game.add.sprite(120,50, 'arrow');
-        //arrowDown = game.add.sprite(120,470, 'arrow');
+        
         
         puck.inputEnabled = true;
         puck.events.onInputDown.add(firePuck);
-        //arrowUp.inputEnabled = true;
-        //arrowDown.inputEnabled = true;
+        
 
         //Add Sounds
         puckSound = game.add.audio('puckSound');
@@ -55,11 +53,9 @@ var playState = {
         goal1.anchor.setTo(0.5);
         goal2.anchor.setTo(0.5);
         puck.anchor.setTo(0.5);
-        //arrowDown.anchor.setTo(0.5);
-        //arrowUp.anchor.setTo(0.5);
         
-        //arrowUp.angle = -270;
-        //arrowDown.angle = -90;
+        movingUp = false;
+        movingDown = false;
         
         //Add physics to players, goals and puck
         game.physics.enable([puck, player1, player2, goal1, goal2], Phaser.Physics.ARCADE);
@@ -84,6 +80,27 @@ var playState = {
         goal1.body.checkCollision.right = false;
         goal2.body.checkCollision.left = false;
         goal2.body.checkCollision.right = false;
+        
+        if(!game.device.desktop){
+            arrowUp = game.add.sprite(120,50, 'arrow');
+            arrowDown = game.add.sprite(120,470, 'arrow');
+
+            arrowUp.inputEnabled = true;
+            arrowDown.inputEnabled = true;
+
+            arrowDown.anchor.setTo(0.5);
+            arrowUp.anchor.setTo(0.5);
+
+            arrowUp.angle = -270;
+            arrowDown.angle = -90;
+
+            arrowUp.events.onInputDown.add(moveUp, this);
+            arrowUp.events.onInputUp.add(stopMove, this);
+
+            arrowDown.events.onInputDown.add(moveDown, this);
+            arrowDown.events.onInputUp.add(stopMove, this);
+        }
+        
     },
     
     update : function(){
@@ -94,12 +111,12 @@ var playState = {
         
         //Check if puck overlaps goal area
         checkGoal();
-
+        
         //creates player controls
-        if (player1Up.isDown) {
+        if (player1Up.isDown || movingUp) {
             player1.body.velocity.y = -500;
         } 
-        else if (player1Down.isDown) {
+        else if (player1Down.isDown || movingDown) {
             player1.body.velocity.y = 500;
         } 
         else if (player2Up.isDown) {
@@ -113,8 +130,8 @@ var playState = {
             player1.body.velocity.setTo(0);
             player2.body.velocity.setTo(0);
         }
-        //if puck is reset press space to start it again
         
+        //if puck is reset press space to start it again
         if (startButton.isDown && puck.body.velocity.x === 0) {
             //TODO randomize these funciton parameters
             firePuck();
@@ -122,8 +139,8 @@ var playState = {
     }
 }
 
-//Helper functions
 
+//Helper functions
 // Just a simple timer to display on the gameboard
 function timerFunc() {
     timer ++;
@@ -136,7 +153,7 @@ function playPuckSound() {
 }
 
 function firePuck() {
-    puck.body.velocity.setTo(1000, 400);
+    puck.body.velocity.setTo(getRandomNum(400,1000), getRandomNum(400,1000));
 }
 
 //checks which player to add score and updates score and text
@@ -180,8 +197,27 @@ function checkGoal() {
     }
 }
 
+function moveUp() {
+    movingUp = true;
+}
 
+function moveDown() {
+    movingDown = true;
+}
 
+function stopMove() {
+    movingUp = false;
+    movingDown = false;
+}
+
+function getRandomNum(min, max) {
+    var num = Math.floor(Math.random() * (max - min) + min);
+    if(num % 2 === 0) {
+        return num - (num * 2);
+    }
+    else {return num;}
+    
+}
 
 
 
