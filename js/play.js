@@ -9,7 +9,7 @@ var playState = {
         player2 = game.add.sprite(810, 250, 'player1');
         goal1 = game.add.sprite(8, 250, 'goal');
         goal2 = game.add.sprite(990, 250, 'goal');
-        puck = game.add.sprite(480, 235, 'puck');
+        puck = game.add.sprite(game.world.centerX, game.world.centerY, 'puck');
 
         //Add Sounds
         puckSound = game.add.audio('puckSound');

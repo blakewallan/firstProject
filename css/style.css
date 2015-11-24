@@ -30,9 +30,24 @@ h1 {
 
 .btn:hover {
     background: none;
-    color: white;
 }
 
 canvas {
     margin: auto;
+}
+
+ul {
+    list-style: none;
+}
+
+#close {
+    background-color: red;
+    border-radius: 0;
+    border: 6px solid red;
+    color: black;
+    margin: 20px;
+    height: 3em;
+    width: 12em;
+    font-size: 1.5em;
+    margin-top: 2em;
 }
